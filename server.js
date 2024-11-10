@@ -2,7 +2,7 @@ require('dotenv').config(); // Đọc biến môi trường từ file .env
 
 const express = require('express');
 const connectDB = require('./config/database');
-const registerRoute = require('./routes/registerRoute');
+const apiRoutes = require('./routes/api');
 const cors = require('cors');
 
 
@@ -10,15 +10,19 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware để parse dữ liệu JSON
-app.use(express.json());
+// config cors
 app.use(cors());
+
+// Middleware để parse dữ liệu JSON
+// config req.body 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true})); // for form data
 
 // Kết nối MongoDB
 connectDB();
 
 // Định nghĩa các routes
-app.use('/user', registerRoute);
+app.use('/v1/api', apiRoutes);
 
 // Lắng nghe trên cổng 3000
 app.listen(PORT, () =>
